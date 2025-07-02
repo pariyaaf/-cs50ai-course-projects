@@ -41,7 +41,6 @@ def load_data(directory):
                 "stars": set()
             }
 
-    # print(people['102'])
 
     # Load stars
     with open(f"{directory}/stars.csv", encoding="utf-8") as f:
@@ -53,7 +52,6 @@ def load_data(directory):
             except KeyError:
                 pass
 
-    # print(people['102'])
 
 def main():
     if len(sys.argv) > 2:
@@ -88,13 +86,33 @@ def main():
 
 
 def shortest_path(source, target):
-    """
-    Returns the shortest list of +(movie_id, person_id) pairs
-    that connect the source to the target.
 
-    If no possible path, returns None.
-    """
+    start = Node(state=source, parent=None, action=None)
+    frontier = QueueFrontier()
+    frontier.add(start)
+    explored = set()
 
+    while True:
+
+        if frontier.empty():
+            raise Exception("no solution")
+
+        node = frontier.remove()
+
+        if node.state == target:
+            path = []
+            while node.parent is not None:
+                path.append((node.action, node.state)) 
+                node = node.parent
+            path.reverse()
+            return path
+
+        explored.add(node.state)
+
+        for movie_id, person_id in neighbors_for_person(node.state):
+            if not frontier.contains_state(person_id) and person_id not in explored:
+                child = Node(state=person_id, parent=node, action=movie_id)
+                frontier.add(child)
     # TODO
     raise NotImplementedError
 
