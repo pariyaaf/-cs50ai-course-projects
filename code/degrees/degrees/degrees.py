@@ -113,8 +113,7 @@ def shortest_path(source, target):
             if not frontier.contains_state(person_id) and person_id not in explored:
                 child = Node(state=person_id, parent=node, action=movie_id)
                 frontier.add(child)
-    # TODO
-    raise NotImplementedError
+
 
 
 def person_id_for_name(name):
