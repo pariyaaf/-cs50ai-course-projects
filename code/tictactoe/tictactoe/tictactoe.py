@@ -47,7 +47,10 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    if board[action[0]][action[1]] != EMPTY:
+    if action[0] < 0 or action[0] >= len(board) or action[1] < 0 or action[1] >= len(board[0]):
+            raise Exception("Invalid action: cell is not empty")
+
+    if board[action[0]][action[1]] != EMPTY :
         raise Exception("Invalid action: cell is not empty")
 
     new_board = copy.deepcopy(board)
