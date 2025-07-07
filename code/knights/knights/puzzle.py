@@ -13,7 +13,7 @@ CKnave = Symbol("C is a Knave")
 # A says "I am both a knight and a knave."
 knowledge0 = And(
     Or(AKnight, AKnave),
-    Not(And(AKnave, AKnight )),
+    Not(And(AKnave, AKnight)),
     Implication(AKnight, And(AKnight, AKnave)),
     Implication(AKnave, Not(And(AKnave, AKnight)))
 )
@@ -24,8 +24,8 @@ knowledge0 = And(
 knowledge1 = And(
     Or(AKnight, AKnave),
     Or(BKnight, BKnave),
-    Not(And(AKnave, AKnight )),
-    Not(And(BKnave, BKnight )),
+    Not(And(AKnave, AKnight)),
+    Not(And(BKnave, BKnight)),
     Implication(AKnight, And(AKnave, BKnave)),
     Implication(AKnave, Not(And(AKnave, BKnave)))
 )
@@ -36,15 +36,15 @@ knowledge1 = And(
 knowledge2 = And(
     Or(AKnight, AKnave),
     Or(BKnight, BKnave),
-    Not(And(AKnave, AKnight )),
-    Not(And(BKnave, BKnight )),
+    Not(And(AKnave, AKnight)),
+    Not(And(BKnave, BKnight)),
     
     Implication(AKnight, Or(And(AKnave, BKnave), And(AKnight, BKnight))),
     Implication(AKnave, Not(Or(And(AKnave, BKnave), And(AKnight, BKnight)))),
 
     Implication(BKnight, Or(And(AKnave, BKnight), And(AKnight, BKnave))),
     Implication(BKnave, Not(Or(And(AKnave, BKnave), And(AKnight, BKnight)))),
-    )
+)
 
 # Puzzle 3
 # A says either "I am a knight." or "I am a knave.", but you don't know which.
@@ -58,22 +58,22 @@ knowledge3 = And(
     Or(AKnight, AKnave),
     Or(BKnight, BKnave),
     Or(CKnight, CKnave),
-    Not(And(AKnave, AKnight )),
-    Not(And(BKnave, BKnight )),
-    Not(And(CKnave, CKnight )),
+    Not(And(AKnave, AKnight)),
+    Not(And(BKnave, BKnight)),
+    Not(And(CKnave, CKnight)),
 
     # A
     Implication(AKnight, Or(AKnight, AKnave)),
     Implication(AKnave, Not(Or(AKnight, AKnave))),
 
     # B
-    Implication(BKnight,And(ASaidKnave, CKnave)),
-    Implication(BKnave,Not(And(ASaidKnave, CKnave))),
+    Implication(BKnight, And(ASaidKnave, CKnave)),
+    Implication(BKnave, Not(And(ASaidKnave, CKnave))),
 
     # C
     Implication(CKnight, AKnight),
     Implication(CKnave, Not(AKnight)),
-    )
+)
 
 
 def main():
