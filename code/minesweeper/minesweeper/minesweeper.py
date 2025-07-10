@@ -202,21 +202,21 @@ class MinesweeperAI():
                if they can be inferred from existing knowledge
         """
         self.moves_made.add(cell)
-        self.safes.add(cell)
+        self.mark_safe(cell)
 
         sentence = Sentence(set(), count)
         for i in range(cell[0] - 1, cell[0] + 2):
-                    for j in range(cell[1] - 1, cell[1] + 2):
-                        if (i, j) == cell:
-                            continue
-                        if 0 <= i < self.height and 0 <= j < self.width:
-                            if (i, j) not in self.safes and (i, j) not in self.mines:
-                                sentence.cells.add((i, j))
-                            elif (i, j) in self.mines:
-                                count -= 1
+            for j in range(cell[1] - 1, cell[1] + 2):
+                if (i, j) == cell:
+                    continue
+                if 0 <= i < self.height and 0 <= j < self.width:
+                    if (i, j) not in self.safes and (i, j) not in self.mines:
+                        sentence.cells.add((i, j))
+                    elif (i, j) in self.mines:
+                        sentence.count -= 1
+
         if sentence:
             self.knowledge.append(sentence)
-
 
         knowledge_changed = True
         while knowledge_changed:
