@@ -63,7 +63,6 @@ def transition_model(corpus, page, damping_factor):
     links = corpus[page] if corpus[page] else set(corpus.keys())
     num_links = len(links)
 
-    
     if not corpus[page]:
         for pg in corpus.keys():
             pr[pg] = 1 / N
@@ -75,7 +74,7 @@ def transition_model(corpus, page, damping_factor):
             pr[q] += damping_factor / num_links
 
     return pr
-    #raise NotImplementedError
+    # raise NotImplementedError
 
 
 def sample_pagerank(corpus, damping_factor, n):
@@ -92,14 +91,14 @@ def sample_pagerank(corpus, damping_factor, n):
     for i in range(n):
         pr = transition_model(corpus, page, damping_factor)
         page = random.choices(population=list(pr.keys()),
-             weights=list(pr.values()),
-            k=1)[0]
+                            weights=list(pr.values()),
+                            k=1)[0]
         result[page] += 1
     
     for page in result:
         result[page] /= n
     return result
-    #raise NotImplementedError
+    # raise NotImplementedError
 
 
 def iterate_pagerank(corpus, damping_factor):
@@ -111,26 +110,37 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
+def iterate_pagerank(corpus, damping_factor):
+    """
+    Return PageRank values for each page by iteratively updating
+    PageRank values until convergence.
+    """
     EPSILON = 0.001
-    old_ranks = {key:0 for key in corpus.keys()}
     N = len(corpus)
 
-    while True:
-        new_ranks = {p:(1 - damping_factor) / N for p in corpus}
-        
-        for p in corpus:
-            for i in corpus:
-                if p in corpus[i]:
-                    num_links = len(corpus[i]) if corpus[i] else N
-                    new_ranks[p] += damping_factor * old_ranks[i] / num_links    
+    old_ranks = {page: 1 / N for page in corpus}
 
-        if max(abs(new_ranks[p] - old_ranks[p]) for p in corpus ) < EPSILON:
+    while True:
+        new_ranks = {page: (1 - damping_factor) / N for page in corpus}
+
+        for page_i, links in corpus.items():
+            num_links = len(links) if links else N
+            share = damping_factor * old_ranks[page_i] / num_links
+            if links:
+                for dest in links:
+                    new_ranks[dest] += share
+            else:
+                for dest in new_ranks:
+                    new_ranks[dest] += share
+
+        diff = max(abs(new_ranks[p] - old_ranks[p]) for p in corpus)
+        if diff < EPSILON:
             break
 
         old_ranks = new_ranks
 
-    return old_ranks
-    #raise NotImplementedError
+    return new_ranks
+    # raise NotImplementedError
 
 
 if __name__ == "__main__":
