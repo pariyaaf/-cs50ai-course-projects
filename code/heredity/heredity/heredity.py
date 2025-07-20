@@ -192,6 +192,21 @@ def update(probabilities, one_gene, two_genes, have_trait, p):
     the person is in `have_gene` and `have_trait`, respectively.
     """
 
+    for person in probabilities:
+        if person in have_trait:
+            probabilities[person]['trait'][True] += p
+        else:
+            probabilities[person]['trait'][False] += p
+        
+        if person in one_gene:
+            probabilities[person]['gene'][1] += p
+        elif person in two_genes:
+            probabilities[person]['gene'][2] += p
+        else:
+            probabilities[person]['gene'][0] += p
+
+    return probabilities
+
 
 def normalize(probabilities):
     """
