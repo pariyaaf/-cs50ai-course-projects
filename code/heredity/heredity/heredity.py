@@ -152,13 +152,13 @@ def joint_probability(people, one_gene, two_genes, have_trait):
             gens[person_name] = 0
 
     for person in people:
-        person_prob  = 1
+        person_prob = 1
         
         num_genes = gens[person]
         person_has_trait = person in have_trait
 
         trait_prob = PROBS["trait"][num_genes][person_has_trait]
-        person_prob  *= trait_prob
+        person_prob *= trait_prob
         gene_prob = 0
         mother = people[person]['mother']
         father = people[person]['father']
@@ -167,8 +167,10 @@ def joint_probability(people, one_gene, two_genes, have_trait):
             gene_prob = PROBS["gene"][num_genes]
         
         else:
-            p_mother = 0.5 if gens[mother] == 1 else (PROBS["mutation"] if gens[mother] == 0 else 1 - PROBS["mutation"])
-            p_father = 0.5 if gens[father] == 1 else (PROBS["mutation"] if gens[father] == 0 else 1 - PROBS["mutation"])
+            p_mother = 0.5 if gens[mother] == 1 else (
+                PROBS["mutation"] if gens[mother] == 0 else 1 - PROBS["mutation"])
+            p_father = 0.5 if gens[father] == 1 else (
+                PROBS["mutation"] if gens[father] == 0 else 1 - PROBS["mutation"])
             
             if num_genes == 0:
                 gene_prob = (1 - p_mother) * (1 - p_father)
@@ -181,7 +183,6 @@ def joint_probability(people, one_gene, two_genes, have_trait):
         total_prob *= person_prob
     
     return total_prob
-
 
 
 def update(probabilities, one_gene, two_genes, have_trait, p):
@@ -213,7 +214,7 @@ def normalize(probabilities):
     Update `probabilities` such that each probability distribution
     is normalized (i.e., sums to 1, with relative proportions the same).
     """
-    
+
     for person in probabilities:
         gene_sum = sum(probabilities[person]['gene'].values())
         for gene in probabilities[person]['gene']:
@@ -222,10 +223,8 @@ def normalize(probabilities):
         trait_sum = sum(probabilities[person]['trait'].values())
         for trait in probabilities[person]['trait']:
             probabilities[person]['trait'][trait] /= trait_sum
+
     # raise NotImplementedError
-
-
-
 
 
 if __name__ == "__main__":
