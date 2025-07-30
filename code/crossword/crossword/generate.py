@@ -213,6 +213,8 @@ class CrosswordCreator():
 
         If no assignment is possible, return None.
         """
+        if self.assignment_complete(assignment):
+            return assignment
         raise NotImplementedError
 
 
