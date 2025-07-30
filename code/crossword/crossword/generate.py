@@ -145,7 +145,27 @@ class CrosswordCreator():
         Return True if arc consistency is enforced and no domains are empty;
         return False if one or more domains end up empty.
         """
-        raise NotImplementedError
+        if arcs is None:
+            queues = list(self.crossword.overlaps.keys())
+        else:
+            queues = arcs
+
+        while queues:
+            x, y = (queues.pop(0))
+            if self.revise(x, y):
+                if len(self.domains[x]) == 0:
+                    return False
+                
+
+                neighbors = self.crossword.neighbors(x)
+                neighbors.remove(y)
+                for neighbor in neighbors:
+                    print(neighbor)
+                    if (neighbor, x) not in queues:
+                        queues.append((neighbor, x))
+
+        return True
+        # raise NotImplementedError
 
     def assignment_complete(self, assignment):
         """
