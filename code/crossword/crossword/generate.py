@@ -114,21 +114,21 @@ class CrosswordCreator():
         """
         removed_domains = set()
         if (x, y) in self.crossword.overlaps and self.crossword.overlaps[(x, y)] is not None:
-                x_domain = self.domains[x]
-                y_domain = self.domains[y]
-                overlap = self.crossword.overlaps[(x,y)]
-                for x_dom in x_domain:
-                    found_match = False
-                    for y_dom in y_domain:
-                        if x_dom[overlap[0]] == y_dom[overlap[1]]:
-                            found_match = True
-                            break
-                    if not found_match:
-                        removed_domains.add(x_dom)
-                
-                if removed_domains:
-                    self.domains[x] -= removed_domains
-                    return True
+            x_domain = self.domains[x]
+            y_domain = self.domains[y]
+            overlap = self.crossword.overlaps[(x,y)]
+            for x_dom in x_domain:
+                found_match = False
+                for y_dom in y_domain:
+                    if x_dom[overlap[0]] == y_dom[overlap[1]]:
+                        found_match = True
+                        break
+                if not found_match:
+                    removed_domains.add(x_dom)
+            
+            if removed_domains:
+                self.domains[x] -= removed_domains
+                return True
                     
         return False
         
@@ -151,7 +151,6 @@ class CrosswordCreator():
             if self.revise(x, y):
                 if len(self.domains[x]) == 0:
                     return False
-                
 
                 neighbors = self.crossword.neighbors(x)
                 neighbors.remove(y)
@@ -227,9 +226,10 @@ class CrosswordCreator():
                 if not has_match:
                     value_constraints[domain] += 1
 
-        sorted_value_constraints = dict(sorted(value_constraints .items(), key=lambda item: item[1]))
+        sorted_value_constraints = dict(
+            sorted(value_constraints .items(), key=lambda item: item[1])
+            )
         return list(sorted_value_constraints.keys())
-
 
     def select_unassigned_variable(self, assignment):
         """
@@ -242,14 +242,14 @@ class CrosswordCreator():
         unassigned_vars = dict()
         for variable in self.crossword.variables:
             if variable not in assignment:
-                unassigned_vars [variable] = (len(self.domains[variable]), len(self.crossword.neighbors(variable)))
+                unassigned_vars [variable] = (len(self.domains[variable]),
+                                            len(self.crossword.neighbors(variable)))
 
         sorted_unassigned_vars = dict(sorted(
             unassigned_vars .items(),
             key=lambda item: (item[1][0], -item[1][1])
         ))
         return list(sorted_unassigned_vars.keys())[0]
-
 
     def backtrack(self, assignment):
         """
@@ -266,12 +266,12 @@ class CrosswordCreator():
         selected_var = self.select_unassigned_variable(assignment)
 
         for value in self.order_domain_values(selected_var, assignment):
-                assignment[selected_var] = value
-                if self.consistent(assignment):
-                    result = self.backtrack(assignment)
-                    if result is not None:
-                        return result
-                del assignment[selected_var]
+            assignment[selected_var] = value
+            if self.consistent(assignment):
+                result = self.backtrack(assignment)
+                if result is not None:
+                    return result
+            del assignment[selected_var]
 
         return None
 
