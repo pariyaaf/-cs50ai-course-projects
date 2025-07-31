@@ -208,11 +208,25 @@ class CrosswordCreator():
         var_domains = self.domains[var]
 
         for domain in var_domains:
-            value_constraints [domain] = 0
+            value_constraints[domain] = 0
             for neighbor in neighbors:
-                if domain in self.domains[neighbor]:
-                    value_constraints [domain] += 1
-        
+                if neighbor in assignment:
+                    continue
+
+                overlap = self.crossword.overlaps.get((var, neighbor))
+                if overlap is None:
+                    continue
+
+                i, j = overlap
+                has_match = False
+                for neighbor_word in self.domains[neighbor]:
+                    if domain[i] == neighbor_word[j]:
+                        has_match = True
+                        break
+
+                if not has_match:
+                    value_constraints[domain] += 1
+
         sorted_value_constraints = dict(sorted(value_constraints .items(), key=lambda item: item[1]))
         return list(sorted_value_constraints.keys())
 
