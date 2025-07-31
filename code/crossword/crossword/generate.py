@@ -203,7 +203,19 @@ class CrosswordCreator():
         The first value in the list, for example, should be the one
         that rules out the fewest values among the neighbors of `var`.
         """
-        raise NotImplementedError
+        value_constraints  = {}
+        neighbors = self.crossword.neighbors(var)
+        var_domains = self.domains[var]
+
+        for domain in var_domains:
+            value_constraints [domain] = 0
+            for neighbor in neighbors:
+                if domain in self.domains[neighbor]:
+                    value_constraints [domain] += 1
+        
+        sorted_value_constraints = dict(sorted(value_constraints .items(), key=lambda item: item[1]))
+        return list(sorted_value_constraints.keys())
+
 
     def select_unassigned_variable(self, assignment):
         """
