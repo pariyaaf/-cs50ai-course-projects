@@ -248,7 +248,18 @@ class CrosswordCreator():
         """
         if self.assignment_complete(assignment):
             return assignment
-        raise NotImplementedError
+
+        selected_var = self.select_unassigned_variable(assignment)
+
+        for value in self.order_domain_values(selected_var, assignment):
+                assignment[selected_var] = value
+                if self.consistent(assignment):
+                    result = self.backtrack(assignment)
+                    if result is not None:
+                        return result
+                del assignment[selected_var]
+
+        return None
 
 
 def main():
