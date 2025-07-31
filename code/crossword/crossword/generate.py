@@ -102,7 +102,6 @@ class CrosswordCreator():
         for variable in self.crossword.variables:
             length = variable.length
             self.domains[variable] = {val for val in self.domains[variable] if len(val) == length}
-        # raise NotImplementedError
 
     def revise(self, x, y):
         """
@@ -114,15 +113,14 @@ class CrosswordCreator():
         False if no revision was made.
         """
         removed_domains = set()
-        if  (x,y) in self.crossword.overlaps.keys():
-            if self.crossword.overlaps[(x,y)] is not None:
-                x_domains = self.domains[x]
-                y_domains = self.domains[y]
-                consist = self.crossword.overlaps[(x,y)]
-                for x_dom in x_domains:
+        if (x, y) in self.crossword.overlaps and self.crossword.overlaps[(x, y)] is not None:
+                x_domain = self.domains[x]
+                y_domain = self.domains[y]
+                overlap = self.crossword.overlaps[(x,y)]
+                for x_dom in x_domain:
                     found_match = False
-                    for y_dom in y_domains:
-                        if x_dom[consist[0]] == y_dom[consist[1]]:
+                    for y_dom in y_domain:
+                        if x_dom[overlap[0]] == y_dom[overlap[1]]:
                             found_match = True
                             break
                     if not found_match:
@@ -134,8 +132,6 @@ class CrosswordCreator():
                     
         return False
         
-        # raise NotImplementedError
-
     def ac3(self, arcs=None):
         """
         Update `self.domains` such that each variable is arc consistent.
@@ -160,12 +156,10 @@ class CrosswordCreator():
                 neighbors = self.crossword.neighbors(x)
                 neighbors.remove(y)
                 for neighbor in neighbors:
-                    print(neighbor)
                     if (neighbor, x) not in queues:
                         queues.append((neighbor, x))
 
         return True
-        # raise NotImplementedError
 
     def assignment_complete(self, assignment):
         """
@@ -176,7 +170,6 @@ class CrosswordCreator():
             if variable not in assignment:
                 return False
         return True
-        # raise NotImplementedError
 
     def consistent(self, assignment):
         """
