@@ -59,7 +59,36 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+
+    print(filename)
+    with open(filename) as f:
+        reader = csv.reader(f)
+        next(reader)
+
+        data = [[], []]
+        for row in reader:
+            sample = []
+            for index in range(len(row)-1):
+                if index in [0, 2, 4, 11, 12, 13, 14]:
+                    sample.append(int(row[index]))
+                elif index in [1,3,5,6,7,8,9]:
+                    sample.append(float(row[index]))
+                elif index == 10:
+                    m = {
+                        'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'june': 5,
+                        'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
+                    }
+                    sample.append(m[row[index].lower()])
+                elif index == 15:
+                    sample.append(1 if row[index] == "Returning_Visitor" else 0)
+                elif index == 16:
+                        sample.append(1 if row[index] == "TRUE" else 0)
+
+            data[0].append(sample)
+            data[1].append(1 if row[index] == "TRUE" else 0)
+
+    return data
+    # raise NotImplementedError
 
 
 def train_model(evidence, labels):
