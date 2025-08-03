@@ -116,8 +116,23 @@ def evaluate(labels, predictions):
     representing the "true negative rate": the proportion of
     actual negative labels that were accurately identified.
     """
-    raise NotImplementedError
+    TP, TN, FP, FN = 0, 0, 0, 0
 
+    for label, predict in zip(labels, predictions):
+        if label == 1 and predict == 1:
+            TP += 1
+        elif label == 0 and predict == 0:
+            TN += 1
+        elif label == 1 and predict == 0:
+            FN += 1
+        elif label == 0 and predict == 1:
+            FP += 1
+        
+    sensitivity = TP / (TP + FN) if (TP + FN) != 0 else 0
+    specificity = TN / (TN + FP) if (TN + FP) != 0 else 0
+
+    return sensitivity, specificity
+    # raise NotImplementedError
 
 if __name__ == "__main__":
     main()
