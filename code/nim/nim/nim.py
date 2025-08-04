@@ -113,13 +113,15 @@ class NimAI():
         Use the formula:
 
         Q(s, a) <- old value estimate
-                   + alpha * (new value estimate - old value estimate)
+                    + alpha * (new value estimate - old value estimate)
 
         where `old value estimate` is the previous Q-value,
         `alpha` is the learning rate, and `new value estimate`
         is the sum of the current reward and estimated future rewards.
         """
-        raise NotImplementedError
+        self.q[(tuple(state), action)] = old_q + self.alpha * ((reward + future_rewards) - old_q)
+        return self.q[(tuple(state), action)] 
+        # raise NotImplementedError
 
     def best_future_reward(self, state):
         """
