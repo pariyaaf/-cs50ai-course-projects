@@ -20,9 +20,8 @@ x_test = x_test.reshape(
 model = tf.keras.models.Sequential([
 
     # Convolutional layer. Learn 32 filters using a 3x3 kernel
-    tf.keras.layers.Conv2D(
-        32, (3, 3), activation="relu", input_shape=(28, 28, 1)
-    ),
+    tf.keras.layers.Input(shape=(28, 28, 1)), 
+    tf.keras.layers.Conv2D(32, (3, 3), activation="relu"),
 
     # Max-pooling layer, using 2x2 pool size
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
@@ -52,5 +51,5 @@ model.evaluate(x_test,  y_test, verbose=2)
 # Save model to file
 if len(sys.argv) == 2:
     filename = sys.argv[1]
-    model.save(filename)
+    model.save(filename, save_format="keras")
     print(f"Model saved to {filename}.")
